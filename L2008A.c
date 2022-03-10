@@ -26,9 +26,33 @@ int top(void){
 }
 
 int main(){
-    if (empty() == 1){
-        printf("Empty");
+    int input_val;
+
+    stack_init();
+
+    while (input_val != 999){
+        fflush(stdin);
+        scanf("%d", &input_val);
+        if (input_val == 0){
+            if (t == -1){
+                printf("Error - Stack is empty\n");
+            }
+            else{
+                pop();
+            }
+        }
+        else if (input_val < 0){
+            int top_val;
+            top_val = top();
+            if (t == -1){
+                printf("Error - Stack is empty\n");
+            }
+            else{
+            printf("%d\n", top_val);
+            }
+        }
+        else{
+            push(input_val);
+        }
     }
-    
-    return 0;
 }
