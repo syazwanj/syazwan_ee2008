@@ -86,7 +86,7 @@ void print_graph(void){
 void dfs(int vertex){
     int w;
     count++;
-    sequence[vertex] = count; // Mark vertex with count
+    sequence[count] = vertex; // Mark vertex with count
     visit[vertex] = 1; // Mark vertex as visited
     printf("Visited vertex %d. visit[vertex] = %d. sequence[vertex] = %d \n", vertex, visit[vertex], sequence[vertex]);
     for (int i = 1; i <= V; i++){
