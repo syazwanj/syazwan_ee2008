@@ -1,30 +1,51 @@
 #include <stdio.h> /* Include header file for printf */
 #define maxV 100 /* Define a constant */
 
-int a[maxV][maxV], visit[maxV];/* Declare a two dimensional array */
+int a[maxV][maxV], visit[maxV], sequence[maxV], parent[maxV];
 int count = 0; /* Declare and initialize variable */
-int V, E, x, y;
+int V, E, x, y, component;
 
 void read_graph(void); /* Function prototype */
 void print_graph(void);
-int dfs(int *adj_matr);
-int dfs_recurs(int v);
+void dfs(int vertex);
 
 // store 2d array for convenience. Just use this
-int arr_2d[7][7] = {
-    {0,1,1,0,0,0,0},
-    {1,0,1,0,0,0,0},
-    {1,1,0,1,0,0,0},
-    {0,0,1,0,0,0,0},
-    {0,0,0,0,0,1,1},
-    {0,0,0,0,1,0,1},
-    {0,0,0,0,1,1,0}
+int arr_2d[8][8] = {
+    {0,0,0,0,0,0,0,0},
+    {0,0,1,1,0,0,0,0},
+    {0,1,0,1,0,0,0,0},
+    {0,1,1,0,1,0,0,1},
+    {0,0,0,1,0,0,0,0},
+    {0,0,0,0,0,0,1,1},
+    {0,1,0,0,0,1,0,1},
+    {0,0,0,1,0,1,1,0}
 };
 
 void main(){
     //read_graph(); /* call function to input graph adjacency matrix */
     //print_graph(); /* call function to output graph adjacency matrix */
-    dfs(*arr_2d);
+    count = 0;
+    V = 7;
+
+    // Mark each vertex with 0 (unvisited)
+    for (int i = 1; i <= V; i++){
+        visit[i] = 0;
+    }
+    for (int vertex = 1; vertex <= V; vertex++){
+        if (!visit[vertex]){
+            component++;
+            dfs(vertex);
+        }
+    }
+    printf("parent: ");
+    for (int idx = 1; idx <= V; idx++){
+        printf("%d", parent[idx]);
+    }
+    printf("\nsequence: ");
+    for (int idx = 1; idx <= V; idx++){
+        printf("%d", sequence[idx]);
+    }
+
 }
 
 void read_graph(void){
@@ -54,7 +75,7 @@ void read_graph(void){
 
 void print_graph(void){
     int x, y;
-    printf("%d %d %d", x,y,V);
+    printf("The adjacency matrix is: \n");
     for (x = 1; x <= V; x++){
         for (y = 1; y <= V; y++){
             printf("a[%d][%d] = %d\n", x, y, a[x][y]);
@@ -62,38 +83,19 @@ void print_graph(void){
     }
 }
 
-int dfs(int *adj_matr){
-    int component;
-    count = 0;
-    
-    for (int i = 1; i <= V; i++){
-        visit[i] = 0;
-    }
-
-    for (int vertex = 1; vertex <= V; vertex++){
-        if (!visit[vertex]){
-            component++;
-            dfs_recurs(vertex);
-        }
-    }
-
-    for (int i = 1; i <= V; i++){
-        printf("%d", visit[i]);
-    }
-
-    return 0;
-}
-
-int dfs_recurs(int vertex){
-    int y;
+void dfs(int vertex){
+    int w;
     count++;
-    visit[vertex] = count;
-    for (y = 1; y <= V; y++){
-        int w = arr_2d[vertex][y];
-        if (!visit[w]){
-            dfs_recurs(w);
+    sequence[vertex] = count; // Mark vertex with count
+    visit[vertex] = 1; // Mark vertex as visited
+    printf("Visited vertex %d. visit[vertex] = %d. sequence[vertex] = %d \n", vertex, visit[vertex], sequence[vertex]);
+    for (int i = 1; i <= V; i++){
+        w = arr_2d[vertex][i];
+        printf("Value of w and i and vertex is %d %d %d\n",w, i, vertex);
+        if (w == 1 && !visit[i]){
+            printf("imma visit %d", i);
+            parent[i] = vertex;
+            dfs(i);
         }
     }
-
-    return 0;
 }
